@@ -1,0 +1,5 @@
+export { Login } from "./Login"
+export { Register } from "./Register"
+export { Dashboard } from "./Dashboard"
+export { ForgotPassword } from "./ForgotPassword"
+export { PasswordRecovery } from "./PasswordRecovery"
