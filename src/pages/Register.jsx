@@ -9,6 +9,7 @@ export function Register() {
   const passwordConfirmRef = useRef()
   const { signup } = useAuth()
   const [error, setError] = useState("")
+  const [message, setMessage] = useState("")
   const [loading, setLoading] = useState(false)
 
   async function handleSubmit(e) {
@@ -17,9 +18,11 @@ export function Register() {
     if(passwordRef.current.value !== passwordConfirmRef.current.value) return setError("Passwords do not match")
     
     try {
-      setError('')
+      setError("")
+      setMessage("")
       setLoading(true)
       await signup(emailRef.current.value, passwordRef.current.value)
+      setMessage("Successfully registered your account")
       setLoading(false)
       
     } catch {
@@ -36,6 +39,7 @@ export function Register() {
             <Card.Body>
             <h2 className="text-center mb-4 ">Sign Up</h2>
             {error && <Alert variant="danger">{error}</Alert>}
+            {message && <Alert variant="danger">{message}</Alert>}
             <Form onSubmit={handleSubmit}>
               <Form.Group id="email" className="mb-3">
                 <Form.Label>Email</Form.Label>
