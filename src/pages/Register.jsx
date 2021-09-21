@@ -23,12 +23,10 @@ export function Register() {
       setLoading(true)
       await signup(emailRef.current.value, passwordRef.current.value)
       setMessage("Successfully registered your account")
-      setLoading(false)
-      
     } catch {
       setError("Failed to create an account")
-      setLoading(false)
     }
+    setLoading(false)
   }
 
   return (

@@ -18,10 +18,10 @@ export function Login() {
       setError('')
       setLoading(true)
       await login(emailRef.current.value, passwordRef.current.value)
-      setLoading(false)
     } catch {
       setError("Failed to login to your account")
     }
+    setLoading(false)
   }
 
   return (

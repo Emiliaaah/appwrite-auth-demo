@@ -10,11 +10,12 @@ export function Dashboard() {
   
   async function handleLogout() {
     try {
+      setError("")
       await logout()
-      setLoading(false)
     } catch {
       setError("Failed to log out")
     }
+    setLoading(false)
   }
   console.log(currentUser)
 

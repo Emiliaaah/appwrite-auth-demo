@@ -20,12 +20,11 @@ export function ForgotPassword() {
       setLoading(true)
       await resetPassword(emailRef.current.value)
       setMessage("Check your inbox for further instructions")
-      setLoading(false)
     } catch(err) {
       console.log(err)
       setError("Failed to reset password")
-      setLoading(false)
     }
+    setLoading(false)
   }
 
   return (
