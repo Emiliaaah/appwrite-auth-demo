@@ -1,5 +1,2 @@
-export { Login } from "./Login"
-export { Register } from "./Register"
+export { Login, Register, ForgotPassword, PasswordRecovery } from "./authentication"
 export { Dashboard } from "./Dashboard"
-export { ForgotPassword } from "./ForgotPassword"
-export { PasswordRecovery } from "./PasswordRecovery"
