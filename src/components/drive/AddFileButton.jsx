@@ -27,7 +27,7 @@ export default function AddFileButton({ currentFolder }) {
       })
     } else {
       const uploadTask = await app.storage.createFile(file, [`user:${currentUser.$id}`, '*'])
-      let promise = await createDocument(process.env.REACT_APP_FILES_COLLECTION_ID, {
+      await createDocument(process.env.REACT_APP_FILES_COLLECTION_ID, {
         fileId: uploadTask.$id,
         previewUrl: await getFilePreview(uploadTask.$id),
         downloadUrl: await getFileDownload(uploadTask.$id),
@@ -37,7 +37,6 @@ export default function AddFileButton({ currentFolder }) {
         folderId: currentFolder.$id ?? "null",
         userId: currentUser.$id,
       })
-      console.log(promise)
     }
   }
 

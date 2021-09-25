@@ -17,7 +17,6 @@ export function Profile() {
     }
     setLoading(false)
   }
-  console.log(currentUser)
 
   return (
     <>
