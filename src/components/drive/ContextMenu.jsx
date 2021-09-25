@@ -51,7 +51,7 @@ const Menu = ({ outerRef, childFiles, childFolders, setError }) => {
           let hasChildFiles =  await listDocuments(process.env.REACT_APP_FILES_COLLECTION_ID, [`folderId=${folder[0].$id}`])
           let hasChildFolders = await listDocuments(process.env.REACT_APP_FOLDERS_COLLECTION_ID, [`parentId=${folder[0].$id}`])
 
-          if (hasChildFiles.documents.length < 0 || hasChildFolders.documents.length < 0) return setError("Directory is not empty")
+          if (hasChildFiles.documents.length === 0 || hasChildFolders.documents.length === 0) return setError("Directory is not empty")
           deleteDocument(process.env.REACT_APP_FOLDERS_COLLECTION_ID, folder[0].$id)
           break
 
