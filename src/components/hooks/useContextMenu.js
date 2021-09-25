@@ -4,12 +4,18 @@ const useContextMenu = outerRef => {
   const [xPos, setXPos] = useState("0px");
   const [yPos, setYPos] = useState("0px");
   const [menu, showMenu] = useState(false);
-  const [target, setTarget] = useState("")
+  const [target, setTarget] = useState({})
 
   const handleContextMenu = useCallback(
     event => {
       event.preventDefault();
-      setTarget(event.target.parentNode.id)
+      let eventTarget;
+      if (event.target.parentNode.parentNode) {
+        eventTarget = event.target.parentNode.id ? event.target.parentNode : event.target.parentNode.parentNode.parentNode
+      } else return
+      if (!eventTarget.id || eventTarget.id === 'root') return
+      setTarget({ type: eventTarget.classList.value.includes('folder') ? 'folder' : 'file' , id: eventTarget.id })
+ 
       if (outerRef && outerRef.current.contains(event.target)) {
         setXPos(`${event.pageX}px`);
         setYPos(`${event.pageY}px`);

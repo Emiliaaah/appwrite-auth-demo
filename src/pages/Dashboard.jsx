@@ -20,7 +20,7 @@ export function Dashboard() {
     <>
       <Navbar />
       <Container ref={outerRef} fluid> 
-          <Menu outerRef={outerRef} childFiles={childFiles} />
+        <Menu outerRef={outerRef} childFiles={childFiles} childFolders={childFolders} />
         <div className="d-flex align-items-center pt-4">
           <FolderBreadcrumbs currentFolder={folder} />
           <AddFileButton currentFolder={folder} />
@@ -29,7 +29,7 @@ export function Dashboard() {
         {childFolders.length > 0 && (
         <div className="d-flex flex-wrap">
           {childFolders.map(childFolder => (
-            <div key={childFolder.$id} id={childFolder.$id} style={{maxWidth: "250px"}} className="p-2">
+            <div key={childFolder.$id} id={childFolder.$id} style={{maxWidth: "250px"}} className="p-2 folder">
               <Folder folder={childFolder} />
             </div>
           ))}
@@ -39,7 +39,7 @@ export function Dashboard() {
         {childFiles.length > 0 && (
           <div className="d-flex flex-wrap">
             {childFiles.map(childFile => (
-              <div key={childFile.$id} id={childFile.$id} style={{maxWidth: "250px"}} className="p-2">
+              <div key={childFile.$id} id={childFile.$id} style={{maxWidth: "250px"}} className="p-2 file">
                 <File file={childFile} />
               </div>
             ))}
