@@ -1,6 +1,6 @@
 .menu {
   background-color: #f2f2f2;
-  border-radius: 2px;
+  border-radius: 12px;
   padding-left: 0;
   margin: 0;
   position: absolute;
@@ -8,11 +8,15 @@
 }
 
 .menu li {
-  padding: 0.2em 1em;
+  text-align: left;
+  padding: 0.5rem;
+  padding-left: 1.25rem;
+  padding-right: 6.75rem;
   color: #000;
   cursor: pointer;
 }
 
 .menu li:hover {
+  border-radius: 12px;
   background-color: #e6e6e6;
 }

@@ -1,3 +1,5 @@
+import { faEye, faFileDownload, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { useAuth } from "../../contexts/AuthContext";
 
@@ -35,9 +37,18 @@ const Menu = ({ outerRef, childFiles }) => {
   if (menu) {
     return (
       <ul className="menu" style={{ top: yPos, left: xPos }}>
-        <li onClick={handleClick}>Open</li>
-        <li onClick={handleClick}>Download</li>
-        <li onClick={handleClick}>Delete</li>
+        <li onClick={handleClick}>
+          <FontAwesomeIcon icon={faEye} className="me-2" />
+          Open
+        </li>
+        <li onClick={handleClick}>
+        <FontAwesomeIcon icon={faFileDownload} className="me-2" />
+          Download
+        </li>
+        <li onClick={handleClick}>
+        <FontAwesomeIcon icon={faTrash} className="me-2"/>
+          Delete
+        </li>
       </ul>
     );
   }
