@@ -41,6 +41,57 @@ export function AuthProvider({ children }) {
     return await app.account.updatePrefs(prefs)
   }
 
+  async function createDocument(collectionId, props) {
+    return await app.database.createDocument(collectionId, props);
+  }
+
+  async function getDocument(collectionId, documentId) {
+    return await app.database.getDocument(collectionId, documentId);
+  }
+
+  async function listDocuments(collectionId, filters) {
+    return await app.database.listDocuments(collectionId, filters);
+  }
+
+  async function updateDocument(collectionId, documentId, props) {
+    return await app.database.updateDocument(collectionId, documentId, props);
+  }
+
+  async function deleteDocument(collectionId, documentId) {
+    return await app.database.deleteDocument(collectionId, documentId);
+  }
+
+  async function createFile(file, read, write) {
+    return await app.storage.createFile(file, read, write);
+  }
+
+  async function getFile(fileId) {
+    return await app.storage.getFile(fileId);
+  }
+
+  async function listFiles() {
+    return await app.storage.listFiles();
+  }
+
+  async function getFilePreview(fileId) {
+    return await app.storage.getFilePreview(fileId);
+  }
+
+  async function getFileDownload(fileId) {
+    return await app.storage.getFileDownload(fileId);
+  }
+
+  async function getFileView(fileId) {
+    return await app.storage.getFileView(fileId);
+  }
+
+  async function updateFile(fileId) {
+    return await app.storage.updateFile(fileId);
+  }
+
+  async function deleteFile(fileId) {
+    return await app.storage.deleteFile(fileId);
+  }
   
   useEffect((isActive) => {
     isActive = true;
@@ -62,6 +113,19 @@ export function AuthProvider({ children }) {
     resetPassword,
     confirmResetPassword,
     updatePrefs,
+    createDocument,
+    getDocument,
+    listDocuments,
+    updateDocument,
+    deleteDocument,
+    createFile,
+    getFile,
+    listFiles,
+    getFilePreview,
+    getFileDownload,
+    getFileView,
+    updateFile,
+    deleteFile
   }
 
   return (
