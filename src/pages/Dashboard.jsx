@@ -1,40 +1,74 @@
-import React, { useState } from 'react'
-import { Button, Card, Container, Alert } from 'react-bootstrap'
+import React, { useRef, useState } from 'react'
+import { Alert, Container } from 'react-bootstrap'
+import AddFolderButton from '../components/drive/AddFolderButton'
+import Navbar from '../components/drive/Navbar'
+import { useFolder } from '../components/hooks/useFolder'
+import { useParams, useLocation } from 'react-router-dom'
+import FolderBreadcrumbs from '../components/drive/FolderBreadcrumbs'
+import AddFileButton from '../components/drive/AddFileButton'
+import Folder from '../components/drive/Folder'
+import File from '../components/drive/File'
+import Menu from '../components/drive/ContextMenu'
+import ReactDOM from 'react-dom'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-import { useAuth } from '../contexts/AuthContext'
 
 export function Dashboard() {
-  const { logout, currentUser } = useAuth()
+  const { folderId } = useParams()
+  const { state= {} } = useLocation()
+  const { folder, childFolders, childFiles } = useFolder(folderId, state.folder)
+  const outerRef = useRef(null);
   const [error, setError] = useState("")
-  const [loading, setLoading] = useState(false)
-  
-  async function handleLogout() {
-    try {
+
+  function handleSetError(message) {
+    setError(message)
+    setTimeout(() => {
       setError("")
-      await logout()
-    } catch {
-      setError("Failed to log out")
-    }
-    setLoading(false)
+    }, 10000)
   }
-  console.log(currentUser)
 
   return (
     <>
-    <Container className="d-flex align-items-center justify-content-center" style={{minHeight: "100vh"}}>
-      <div className="w-100" style={{maxWidth: "400px"}}>
-        <Card>
-          <Card.Body>
-          <h2 className="text-center mb-4">Profile</h2>
-          {error && <Alert variant="danger">{error}</Alert>}
-          <strong>Email:</strong> {currentUser.email}
-          </Card.Body>
-        </Card>
-        <div className="w-100 text-center mt-2">
-          <Button variant="link" disabled={loading} onClick={handleLogout}>Logout</Button>
+      <Navbar />
+      <Container ref={outerRef} fluid> 
+        <Menu outerRef={outerRef} childFiles={childFiles} childFolders={childFolders} setError={handleSetError}/>
+        <div className="d-flex align-items-center pt-4">
+          <FolderBreadcrumbs currentFolder={folder} />
+          <AddFileButton currentFolder={folder} />
+          <AddFolderButton currentFolder={folder} />
         </div>
-      </div>
-    </Container>
-  </>
+        {childFolders.length > 0 && (
+        <div className="d-flex flex-wrap">
+          {childFolders.map(childFolder => (
+            <div key={childFolder.$id} id={childFolder.$id} style={{maxWidth: "250px"}} className="p-2 folder">
+              <Folder folder={childFolder} />
+            </div>
+          ))}
+        </div>
+        )}
+        {childFolders.length > 0 && childFiles.length > 0 && <hr />}
+        {childFiles.length > 0 && (
+          <div className="d-flex flex-wrap">
+            {childFiles.map(childFile => (
+              <div key={childFile.$id} id={childFile.$id} style={{maxWidth: "250px"}} className="p-2 file">
+                <File file={childFile} />
+              </div>
+            ))}
+          </div>
+        )}
+      </Container>
+      {error && ReactDOM.createPortal(
+        <div
+        style={{
+          position: "absolute",
+          bottom: "1rem",
+          right: "1rem",
+          maxWidth: "250px"
+        }}
+        >
+          <Alert variant="danger">Directory is not empty</Alert>
+        </div>, document.body
+      )}
+    </>
   )
 }
