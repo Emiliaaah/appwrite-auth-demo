@@ -8,7 +8,9 @@ const ACTIONS = {
   SET_CHILD_FOLDERS: 'set-child-folders',
   SET_CHILD_FIles: 'set-child-files',
   APPEND_CHILD_FOLDERS: 'append-child-folders',
-  APPEND_CHILD_FILES: 'append-child-files'
+  APPEND_CHILD_FILES: 'append-child-files',
+  DELETE_CHILD_FOLDER: 'delete-child-folder',
+  DELETE_CHILD_FILE: 'delete-child-file',
 }
 
 export const ROOT_FOLDER = { name: "Root", $id: null, path: [] }
@@ -52,6 +54,26 @@ function reducer(state, {type, payload}) {
       return {
         ...state,
         childFiles: [...state.childFiles, payload.childFiles]
+      }
+
+    case ACTIONS.DELETE_CHILD_FOLDER:
+      return {
+        ...state,
+        childFolders: state.childFolders.filter(folder => {
+          // eslint-disable-next-line array-callback-return
+          if (folder.$id === payload.childFolder.$id) return
+          else return folder
+        })
+      }
+
+    case ACTIONS.DELETE_CHILD_FILE:
+      return {
+        ...state,
+        childFiles: state.childFiles.filter(file => {
+          // eslint-disable-next-line array-callback-return
+          if (file.$id === payload.childFile.$id) return
+          else return file
+        })
       }
 
     default:
@@ -111,6 +133,12 @@ export function useFolder(folderId = null, folder = null) {
             payload: { childFolders: response.payload}
           })
         }
+        if (response.event === "database.documents.delete") {
+          dispatch({
+            type: ACTIONS.DELETE_CHILD_FOLDER,
+            payload: { childFolder: response.payload}
+          })
+        }
       })
     })
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -128,6 +156,12 @@ export function useFolder(folderId = null, folder = null) {
           dispatch({
             type: ACTIONS.APPEND_CHILD_FILES,
             payload: { childFiles: response.payload}
+          })
+        }
+        if (response.event === "database.documents.delete") {
+          dispatch({
+            type: ACTIONS.DELETE_CHILD_FILE,
+            payload: { childFile: response.payload}
           })
         }
       })
