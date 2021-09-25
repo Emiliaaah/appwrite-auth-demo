@@ -9,17 +9,16 @@ const Menu = ({ outerRef, childFiles }) => {
 
   function handleClick(e) {
     const action = e.target.firstChild.data
+    // eslint-disable-next-line array-callback-return
     const file = childFiles.filter(file => {
       if (file.$id === target) return file 
     })
     switch (action.toLowerCase()) {
       case 'open':
-        // eslint-disable-next-line array-callback-return
         window.location.assign(file[0].viewUrl)
         break
 
       case 'download':
-        // eslint-disable-next-line array-callback-return
         window.open(file[0].downloadUrl, "_blank")
         break
 
