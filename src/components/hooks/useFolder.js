@@ -125,22 +125,8 @@ export function useFolder(folderId = null, folder = null) {
         type: ACTIONS.SET_CHILD_FOLDERS,
         payload: { childFolders: res.documents}
       })
-    }).then(() => {
-      app.subscribe(`collections.${process.env.REACT_APP_FOLDERS_COLLECTION_ID}.documents`, response => {
-        if (response.event === "database.documents.create") {
-          dispatch({
-            type: ACTIONS.APPEND_CHILD_FOLDERS,
-            payload: { childFolders: response.payload}
-          })
-        }
-        if (response.event === "database.documents.delete") {
-          dispatch({
-            type: ACTIONS.DELETE_CHILD_FOLDER,
-            payload: { childFolder: response.payload}
-          })
-        }
-      })
     })
+      
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [folderId, currentUser])
 
@@ -150,24 +136,42 @@ export function useFolder(folderId = null, folder = null) {
         type: ACTIONS.SET_CHILD_FILES,
         payload: { childFiles: res.documents}
       })
-    }).then(() => {
-      app.subscribe(`collections.${process.env.REACT_APP_FILES_COLLECTION_ID}.documents`, response => {
-        if (response.event === "database.documents.create") {
-          dispatch({
-            type: ACTIONS.APPEND_CHILD_FILES,
-            payload: { childFiles: response.payload}
-          })
-        }
-        if (response.event === "database.documents.delete") {
-          dispatch({
-            type: ACTIONS.DELETE_CHILD_FILE,
-            payload: { childFile: response.payload}
-          })
-        }
-      })
     })
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [folderId, currentUser])
+
+  useEffect(() => {
+    app.subscribe(`collections.${process.env.REACT_APP_FILES_COLLECTION_ID}.documents`, response => {
+      if (response.event === "database.documents.create") {
+        dispatch({
+          type: ACTIONS.APPEND_CHILD_FILES,
+          payload: { childFiles: response.payload}
+        })
+      }
+      if (response.event === "database.documents.delete") {
+        dispatch({
+          type: ACTIONS.DELETE_CHILD_FILE,
+          payload: { childFile: response.payload}
+        })
+      }
+    })
+
+    app.subscribe(`collections.${process.env.REACT_APP_FOLDERS_COLLECTION_ID}.documents`, response => {
+      if (response.event === "database.documents.create") {
+        dispatch({
+          type: ACTIONS.APPEND_CHILD_FOLDERS,
+          payload: { childFolders: response.payload}
+        })
+      }
+      if (response.event === "database.documents.delete") {
+        dispatch({
+          type: ACTIONS.DELETE_CHILD_FOLDER,
+          payload: { childFolder: response.payload}
+        })
+      }
+    })
+
+  }, [])
 
   return state
 }
