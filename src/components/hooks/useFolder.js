@@ -1,11 +1,14 @@
 import { useEffect, useReducer } from "react";
 import { useAuth } from "../../contexts/AuthContext";
+import app from "../../utils/appwrite";
 
 const ACTIONS = {
   SELECT_FOLDER: 'select-folder',
   UPDATE_FOLDER: 'update-folder',
   SET_CHILD_FOLDERS: 'set-child-folders',
   SET_CHILD_FIles: 'set-child-files',
+  APPEND_CHILD_FOLDERS: 'append-child-folders',
+  APPEND_CHILD_FILES: 'append-child-files'
 }
 
 export const ROOT_FOLDER = { name: "Root", $id: null, path: [] }
@@ -37,6 +40,18 @@ function reducer(state, {type, payload}) {
       return {
         ...state,
         childFiles: payload.childFiles
+      }
+
+    case ACTIONS.APPEND_CHILD_FOLDERS:
+      return {
+        ...state,
+        childFolders: [...state.childFolders, payload.childFolders]
+      }
+
+    case ACTIONS.APPEND_CHILD_FILES:
+      return {
+        ...state,
+        childFiles: [...state.childFiles, payload.childFiles]
       }
 
     default:
@@ -88,6 +103,15 @@ export function useFolder(folderId = null, folder = null) {
         type: ACTIONS.SET_CHILD_FOLDERS,
         payload: { childFolders: res.documents}
       })
+    }).then(() => {
+      app.subscribe(`collections.${process.env.REACT_APP_FOLDERS_COLLECTION_ID}.documents`, response => {
+        if (response.event === "database.documents.create") {
+          dispatch({
+            type: ACTIONS.APPEND_CHILD_FOLDERS,
+            payload: { childFolders: response.payload}
+          })
+        }
+      })
     })
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [folderId, currentUser])
@@ -97,6 +121,15 @@ export function useFolder(folderId = null, folder = null) {
       dispatch({
         type: ACTIONS.SET_CHILD_FILES,
         payload: { childFiles: res.documents}
+      })
+    }).then(() => {
+      app.subscribe(`collections.${process.env.REACT_APP_FILES_COLLECTION_ID}.documents`, response => {
+        if (response.event === "database.documents.create") {
+          dispatch({
+            type: ACTIONS.APPEND_CHILD_FILES,
+            payload: { childFiles: response.payload}
+          })
+        }
       })
     })
   // eslint-disable-next-line react-hooks/exhaustive-deps
