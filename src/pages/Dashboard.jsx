@@ -1,40 +1,51 @@
-import React, { useState } from 'react'
-import { Button, Card, Container, Alert } from 'react-bootstrap'
-
-import { useAuth } from '../contexts/AuthContext'
+import React, { useRef } from 'react'
+import { Container } from 'react-bootstrap'
+import AddFolderButton from '../components/drive/AddFolderButton'
+import Navbar from '../components/drive/Navbar'
+import { useFolder } from '../components/hooks/useFolder'
+import { useParams, useLocation } from 'react-router-dom'
+import FolderBreadcrumbs from '../components/drive/FolderBreadcrumbs'
+import AddFileButton from '../components/drive/AddFileButton'
+import Folder from '../components/drive/Folder'
+import File from '../components/drive/File'
+import Menu from '../components/drive/ContextMenu'
 
 export function Dashboard() {
-  const { logout, currentUser } = useAuth()
-  const [error, setError] = useState("")
-  const [loading, setLoading] = useState(false)
-  
-  async function handleLogout() {
-    try {
-      setError("")
-      await logout()
-    } catch {
-      setError("Failed to log out")
-    }
-    setLoading(false)
-  }
-  console.log(currentUser)
+  const { folderId } = useParams()
+  const { state= {} } = useLocation()
+  const { folder, childFolders, childFiles } = useFolder(folderId, state.folder)
+  const outerRef = useRef(null);
 
   return (
     <>
-    <Container className="d-flex align-items-center justify-content-center" style={{minHeight: "100vh"}}>
-      <div className="w-100" style={{maxWidth: "400px"}}>
-        <Card>
-          <Card.Body>
-          <h2 className="text-center mb-4">Profile</h2>
-          {error && <Alert variant="danger">{error}</Alert>}
-          <strong>Email:</strong> {currentUser.email}
-          </Card.Body>
-        </Card>
-        <div className="w-100 text-center mt-2">
-          <Button variant="link" disabled={loading} onClick={handleLogout}>Logout</Button>
+      <Navbar />
+      <Container ref={outerRef} fluid> 
+          <Menu outerRef={outerRef} childFiles={childFiles} />
+        <div className="d-flex align-items-center pt-4">
+          <FolderBreadcrumbs currentFolder={folder} />
+          <AddFileButton currentFolder={folder} />
+          <AddFolderButton currentFolder={folder} />
         </div>
-      </div>
-    </Container>
-  </>
+        {childFolders.length > 0 && (
+        <div className="d-flex flex-wrap">
+          {childFolders.map(childFolder => (
+            <div key={childFolder.$id} id={childFolder.$id} style={{maxWidth: "250px"}} className="p-2">
+              <Folder folder={childFolder} />
+            </div>
+          ))}
+        </div>
+        )}
+        {childFolders.length > 0 && childFiles.length > 0 && <hr />}
+        {childFiles.length > 0 && (
+          <div className="d-flex flex-wrap">
+            {childFiles.map(childFile => (
+              <div key={childFile.$id} id={childFile.$id} style={{maxWidth: "250px"}} className="p-2">
+                <File file={childFile} />
+              </div>
+            ))}
+          </div>
+        )}
+      </Container>
+    </>
   )
 }
