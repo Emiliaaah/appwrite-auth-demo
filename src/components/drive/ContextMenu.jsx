@@ -6,12 +6,12 @@ import { useAuth } from "../../contexts/AuthContext";
 
 import useContextMenu from "../hooks/useContextMenu";
 
-const Menu = ({ outerRef, childFiles, childFolders }) => {
+const Menu = ({ outerRef, childFiles, childFolders, setError }) => {
   const { xPos, yPos, menu, target } = useContextMenu(outerRef);
-  const { deleteFile, deleteDocument } = useAuth()
+  const { deleteFile, deleteDocument, listDocuments } = useAuth()
   const history = useHistory()
 
-  function handleClick(e) {
+  async function handleClick(e) {
     const action = e.target.textContent
     if (target.type === "file") {
       // eslint-disable-next-line array-callback-return
@@ -48,6 +48,10 @@ const Menu = ({ outerRef, childFiles, childFolders }) => {
           break
 
         case 'delete':
+          let hasChildFiles =  await listDocuments(process.env.REACT_APP_FILES_COLLECTION_ID, [`folderId=${folder[0].$id}`])
+          let hasChildFolders = await listDocuments(process.env.REACT_APP_FOLDERS_COLLECTION_ID, [`parentId=${folder[0].$id}`])
+          console.log(hasChildFiles, hasChildFolders)
+          if (hasChildFiles.documents.length <= 0 || hasChildFolders.documents.length <= 0) return setError("Directory is not empty")
           deleteDocument(process.env.REACT_APP_FOLDERS_COLLECTION_ID, folder[0].$id)
           break
 
