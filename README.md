@@ -1,6 +1,6 @@
 # Appwrite + ReactJS = ❤
 
-This example is to showcase [Appwrite's JS API](https://github.com/appwrite/sdk-for-js) with [React](https://reactjs.org/) by creating a simple login/register page.
+This example is to showcase [Appwrite's JS API](https://github.com/appwrite/sdk-for-js) with [React](https://reactjs.org/) by creating a Google drive clone using Appwrite Auth, database, Storage and realtime.
 
 ## Getting Started
 
