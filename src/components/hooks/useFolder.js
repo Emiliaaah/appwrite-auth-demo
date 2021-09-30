@@ -11,6 +11,7 @@ const ACTIONS = {
   APPEND_CHILD_FILES: 'append-child-files',
   DELETE_CHILD_FOLDER: 'delete-child-folder',
   DELETE_CHILD_FILE: 'delete-child-file',
+  UPDATE_CHILD_FILE: 'update-child-file',
 }
 
 export const ROOT_FOLDER = { name: "Root", $id: null, path: [] }
@@ -72,6 +73,16 @@ function reducer(state, {type, payload}) {
         childFiles: state.childFiles.filter(file => {
           // eslint-disable-next-line array-callback-return
           if (file.$id === payload.childFile.$id) return
+          else return file
+        })
+      }
+    
+    case ACTIONS.UPDATE_CHILD_FILE:
+      return {
+        ...state,
+        childFiles: state.childFiles.filter(file => {
+          // eslint-disable-next-line array-callback-return
+          if (file.$id === payload.childFile.$id) return payload.childFile
           else return file
         })
       }
@@ -142,6 +153,7 @@ export function useFolder(folderId = null, folder = null) {
 
   useEffect(() => {
     app.subscribe(`collections.${process.env.REACT_APP_FILES_COLLECTION_ID}.documents`, response => {
+      console.log(response)
       if (response.event === "database.documents.create") {
         dispatch({
           type: ACTIONS.APPEND_CHILD_FILES,
@@ -151,6 +163,12 @@ export function useFolder(folderId = null, folder = null) {
       if (response.event === "database.documents.delete") {
         dispatch({
           type: ACTIONS.DELETE_CHILD_FILE,
+          payload: { childFile: response.payload}
+        })
+      }
+      if (response.event === "database.documents.update") {
+        dispatch({
+          type: ACTIONS.UPDATE_CHILD_FILE,
           payload: { childFile: response.payload}
         })
       }
@@ -166,7 +184,7 @@ export function useFolder(folderId = null, folder = null) {
       if (response.event === "database.documents.delete") {
         dispatch({
           type: ACTIONS.DELETE_CHILD_FOLDER,
-          payload: { childFolder: response.payload}
+          payload: { childFile: response.payload}
         })
       }
     })

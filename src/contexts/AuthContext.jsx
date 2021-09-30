@@ -85,8 +85,8 @@ export function AuthProvider({ children }) {
     return await app.storage.getFileView(fileId);
   }
 
-  async function updateFile(fileId) {
-    return await app.storage.updateFile(fileId);
+  async function updateFile(fileId, read, write) {
+    return await app.storage.updateFile(fileId, read, write);
   }
 
   async function deleteFile(fileId) {

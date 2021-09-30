@@ -19,6 +19,7 @@ export function Dashboard() {
   const { folder, childFolders, childFiles } = useFolder(folderId, state.folder)
   const outerRef = useRef(null);
   const [error, setError] = useState("")
+  const [message, setMessage] = useState("")
 
   function handleSetError(message) {
     setError(message)
@@ -27,11 +28,18 @@ export function Dashboard() {
     }, 10000)
   }
 
+  function handleSetMessage(message) {
+    setMessage(message)
+    setTimeout(() => {
+      setMessage("")
+    }, 10000)
+  }
+
   return (
     <>
       <Navbar />
       <Container ref={outerRef} fluid> 
-        <Menu outerRef={outerRef} childFiles={childFiles} childFolders={childFolders} setError={handleSetError}/>
+        <Menu outerRef={outerRef} childFiles={childFiles} childFolders={childFolders} setError={handleSetError} setMessage={handleSetMessage}/>
         <div className="d-flex align-items-center pt-4">
           <FolderBreadcrumbs currentFolder={folder} />
           <AddFileButton currentFolder={folder} />
@@ -66,7 +74,19 @@ export function Dashboard() {
           maxWidth: "250px"
         }}
         >
-          <Alert variant="danger">Directory is not empty</Alert>
+          <Alert variant="danger">{error}</Alert>
+        </div>, document.body
+      )}
+      {message && ReactDOM.createPortal(
+        <div
+        style={{
+          position: "absolute",
+          bottom: "1rem",
+          right: "1rem",
+          maxWidth: "250px"
+        }}
+        >
+          <Alert variant="success">{message}</Alert>
         </div>, document.body
       )}
     </>
