@@ -25,7 +25,11 @@ const Menu = ({ outerRef, childFiles, childFolders, setError }) => {
           break
 
         case 'download':
-          window.open(file[0].downloadUrl, "_blank")
+          const link = document.createElement('a');
+          link.href = file[0].downloadUrl;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
           break
 
         case 'delete':
