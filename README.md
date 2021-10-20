@@ -21,3 +21,12 @@ Once you did that you're all good to go. Now you can start the app by running th
 ```
 yarn start
 ```
+
+## Screenshots
+
+![Login](/images/login.png "Login")
+![Signup](/images/signup.png "signup")
+![Forgot-Password](/images/password-reset.png "Forgot-Password")
+![Dashboard](/images/dashboard.png "Dashboard")
+![Create-Folder](/images/create-folder.png "Create-Folder")
+![Dashboard](/images/dashboard-2.png "Dashboard")
