@@ -184,7 +184,7 @@ export function useFolder(folderId = null, folder = null) {
       if (response.event === "database.documents.delete") {
         dispatch({
           type: ACTIONS.DELETE_CHILD_FOLDER,
-          payload: { childFile: response.payload}
+          payload: { childFolder: response.payload}
         })
       }
     })

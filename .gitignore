@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/appwrite_setup/node_modules
 /.pnp
 .pnp.js
 

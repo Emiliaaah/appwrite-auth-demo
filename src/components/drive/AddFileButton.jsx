@@ -18,7 +18,7 @@ export default function AddFileButton({ currentFolder }) {
       } catch {
         
       }
-      let uploadedFile = await createFile(file, ["*"])
+      let uploadedFile = await createFile(file)
       await updateDocument(process.env.REACT_APP_FILES_COLLECTION_ID, result.documents[0].$id, {
         fileId: uploadedFile.$id,
         previewUrl: await getFilePreview(uploadedFile.$id),
@@ -26,7 +26,7 @@ export default function AddFileButton({ currentFolder }) {
         viewUrl: await getFileView(uploadedFile.$id),
       })
     } else {
-      const uploadTask = await app.storage.createFile(file, [`user:${currentUser.$id}`, '*'])
+      const uploadTask = await app.storage.createFile(file, [`user:${currentUser.$id}`])
       await createDocument(process.env.REACT_APP_FILES_COLLECTION_ID, {
         fileId: uploadTask.$id,
         previewUrl: await getFilePreview(uploadTask.$id),
@@ -36,6 +36,7 @@ export default function AddFileButton({ currentFolder }) {
         createdAt: new Date(),
         folderId: currentFolder.$id ?? "null",
         userId: currentUser.$id,
+        public: false
       })
     }
   }
